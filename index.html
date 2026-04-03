@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Aiden's Games</title>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+
+    body {
+      background: #1a1a2e;
+      color: #e0e0e0;
+      font-family: 'Courier New', monospace;
+      min-height: 100vh;
+      padding: 40px 20px;
+    }
+
+    header {
+      text-align: center;
+      margin-bottom: 48px;
+    }
+
+    header h1 {
+      font-size: 2.5rem;
+      color: #e2b96f;
+      letter-spacing: 0.05em;
+      margin-bottom: 8px;
+    }
+
+    header p {
+      color: #888;
+      font-size: 0.95rem;
+    }
+
+    .games {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+      gap: 24px;
+      max-width: 900px;
+      margin: 0 auto;
+    }
+
+    .game-card {
+      background: #16213e;
+      border: 2px solid #2a2a4a;
+      border-radius: 8px;
+      padding: 24px;
+      text-decoration: none;
+      color: inherit;
+      transition: border-color 0.2s, transform 0.1s;
+      display: block;
+    }
+
+    .game-card:hover {
+      border-color: #e2b96f;
+      transform: translateY(-2px);
+    }
+
+    .game-card h2 {
+      font-size: 1.2rem;
+      color: #e2b96f;
+      margin-bottom: 8px;
+    }
+
+    .game-card p {
+      font-size: 0.85rem;
+      color: #888;
+      line-height: 1.5;
+    }
+
+    .play-label {
+      display: inline-block;
+      margin-top: 16px;
+      font-size: 0.8rem;
+      color: #e2b96f;
+      border: 1px solid #e2b96f;
+      padding: 4px 12px;
+      border-radius: 4px;
+    }
+
+    .game-card:hover .play-label {
+      background: #e2b96f;
+      color: #1a1a2e;
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <h1>Aiden's Games</h1>
+    <p>A collection of games made by Aiden</p>
+  </header>
+
+  <div class="games">
+    <a class="game-card" href="Stickman vs. Lizards.html">
+      <h2>Stickman vs. Lizards</h2>
+      <p>Battle lizards as a stickman in this action-platformer.</p>
+      <span class="play-label">▶ Play</span>
+    </a>
+  </div>
+</body>
+</html>
