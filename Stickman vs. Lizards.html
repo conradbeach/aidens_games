@@ -516,8 +516,6 @@ function updateBonusHero() {
 }
 
 function drawHero() {
-  if (hero.invincible > 0 && Math.floor(hero.flickerToggle / 4) % 2 === 0) return;
-
   const cx = hero.x + hero.w / 2;
   const headY   = hero.y + 10;
   const shoulderY = hero.y + 22;
@@ -528,6 +526,10 @@ function drawHero() {
   const armSwing = -legSwing;
 
   ctx.save();
+  if (hero.invincible > 0 && Math.floor(hero.flickerToggle / 4) % 2 === 0) {
+    ctx.shadowColor = '#ffffff';
+    ctx.shadowBlur = 14;
+  }
   ctx.lineCap = 'round';
   ctx.lineJoin = 'round';
 
@@ -693,6 +695,10 @@ function drawLizard(lz) {
 // ── Ninja Monkey ──────────────────────────────────────────────────────────────
 function updateNinjaMonkey() {
   const m = ninjaMonkey;
+  if (m.phase !== 'leaving' && performance.now() >= m.leaveAt) {
+    m.phase = 'leaving';
+    m.vy = -12;
+  }
   if (m.phase === 'entering') {
     m.vy = Math.min(m.vy + 0.3, 8);
     m.y += m.vy;
@@ -711,7 +717,7 @@ function updateNinjaMonkey() {
       shootNinjaStar();
       m.shotsLeft--;
       if (m.shotsLeft > 0) {
-        m.shotTimer = 180;
+        m.shotTimer = 75;
       } else {
         m.phase = 'leaving';
         m.vy = -12;
@@ -818,7 +824,7 @@ function drawNinjaMonkey(m) {
   ctx.beginPath(); ctx.moveTo(bx + 5 - Math.sin(ls) * 9, fy); ctx.lineTo(bx + 5 - Math.sin(ls) * 9 - 6, fy + 3); ctx.stroke();
 
   // Arm raise when about to throw
-  const aboutToShoot = m.phase === 'walking' && m.shotTimer > 0 && m.shotTimer < 60;
+  const aboutToShoot = m.phase === 'walking' && m.shotTimer > 0 && m.shotTimer < 25;
   const armRaise = aboutToShoot ? 1.0 : 0;
 
   // Left arm
@@ -865,9 +871,9 @@ function drawNinjaMonkey(m) {
   ctx.beginPath(); ctx.moveTo(bx + 12, hy - 8); ctx.lineTo(bx + 18, hy - 4); ctx.stroke();
   ctx.beginPath(); ctx.moveTo(bx + 12, hy - 8); ctx.lineTo(bx + 20, hy - 9); ctx.stroke();
 
-  // Shuriken held in right hand while walking
+  // Banana held in right hand while walking
   if (m.phase === 'walking') {
-    _drawShurikenShape(bx + 24, raEndY - 2, 7, (Date.now() * 0.004) % (Math.PI * 2));
+    _drawBananaShape(bx + 24, raEndY - 2, 7, (Date.now() * 0.004) % (Math.PI * 2));
   }
 
   ctx.restore();
@@ -1096,7 +1102,7 @@ function checkCollisions() {
         lives--;
         hero.invincible = 120; hero.flickerToggle = 0;
         spawnParticles(hero.x+hero.w/2, hero.y+hero.h/2, ['#ff3300','#ff7700','#ffaa00'], 10, 3.5);
-        ninjaMonkey = null; ninjaStars = [];
+        ninjaStars = [];
         state = STATE.DEAD;
         deadTimer = lives <= 0 ? 90 : 60;
       }
@@ -1109,7 +1115,7 @@ function checkCollisions() {
         lives--;
         hero.invincible = 120; hero.flickerToggle = 0;
         spawnParticles(hero.x+hero.w/2, hero.y+hero.h/2, ['#ff3300','#555555','#999999'], 10, 3.5);
-        ninjaMonkey = null; ninjaStars = [];
+        ninjaStars = [];
         state = STATE.DEAD;
         deadTimer = lives <= 0 ? 90 : 60;
         break;
@@ -1332,7 +1338,7 @@ function loop(ts) {
   if (level >= 10 && ninjaMonkeyUsedLevel !== level && ninjaMonkey === null) {
     ninjaMonkeySpawnTimer--;
     if (ninjaMonkeySpawnTimer <= 0) {
-      ninjaMonkey = { x: W - 60, y: -80, vy: 0, phase: 'entering', walkDir: -1, walkFrame: 0, shotTimer: 180, shotsLeft: 4 };
+      ninjaMonkey = { x: W - 60, y: -80, vy: 0, phase: 'entering', walkDir: -1, walkFrame: 0, shotTimer: 75, shotsLeft: 4, leaveAt: performance.now() + 5000 };
       ninjaMonkeyUsedLevel = level;
     }
   }
